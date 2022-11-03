@@ -15,6 +15,7 @@ std::ostream &operator<<(std::ostream &os, const std::vector<bool> &list)
     for (auto const &i: list) {
         os <<  i;
     }
+    os << '\n';
     return os;
 }
 
@@ -36,11 +37,18 @@ private:
 public:
 
     LongueurMaximal(const std::vector<int>& newPolynom){
-        auto newVecteurInitial = generateVecteurInitial(newPolynom);
+        std::vector<bool> newVecteurInitial;
+        // TODO generaer avec le temps
+        newVecteurInitial = generateVecteurInitial(newPolynom);
         codeur = newVecteurInitial;
         vecteurInitial = newVecteurInitial;
         polynomeInt = newPolynom;
         polynomeBool = generateFromPolynopm(newPolynom);
+    }
+
+    LongueurMaximal(const std::vector<int>& newPolynom , bool init): LongueurMaximal(newPolynom){
+
+
     }
 
     const std::vector<bool> &getVecteurInitial() const {
@@ -73,19 +81,35 @@ public:
         return newVecteurInitial ;
     }
 
+    std::vector<bool> generateVecteurInitialFromTime(const std::vector<int> &poly) {
+        time_t seconds = time(NULL)%codeur.size();
+
+        auto max = *max_element(poly.begin(), poly.end());
+        std::vector<bool> newVecteurInitial;
+        for (int i = 0; i < max; ++i) {
+            newVecteurInitial.push_back(true);
+        }
+
+        return newVecteurInitial ;
+    }
+
+    //time_t seconds;
+    //seconds = time(NULL);
+    //std::cout << seconds;
+
     bool generate(){
+        bool result = codeur.back();
         bool newbite = 0;
         for (int i = polynomeBool.size(); i >= 0; i--)
             if (polynomeBool[i] == 1)
                 newbite = newbite xor codeur[i];
         codeur.pop_back();
         codeur.insert(codeur.begin(),newbite);
-        return codeur.back();
+        return result;
     }
 
     std::vector<bool> generate(int n){
         std::vector<bool> result;
-        result.push_back(codeur.back());
         for (int i = 0; i < n; ++i)
             result.push_back(generate());
         return result;
@@ -95,8 +119,8 @@ public:
     friend std::ostream &operator<<(std::ostream &os, const LongueurMaximal &maximal) {
         os << "LongueurMaximal:"
         << "\n\tcodeur: " << maximal.codeur
-        << "\n\tvecteurInitial: " << maximal.vecteurInitial
-        << "\n\tpolynome:" << maximal.polynomeInt
+        << "\tvecteurInitial: " << maximal.vecteurInitial
+        << "\tpolynome:" << maximal.polynomeInt
         << "\n\t\t" << maximal.polynomeBool
         << "\n";
         return os;
