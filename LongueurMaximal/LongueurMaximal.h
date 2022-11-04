@@ -9,24 +9,33 @@
 #include <ostream>
 #include <iostream>
 #include <algorithm>
+#include <math.h>
 
-std::ostream &operator<<(std::ostream &os, const std::vector<bool> &list)
+#ifdef _MSC_VER
+// Windows
+#include <Windows.h>
+#else
+// Linux
+#include <time.h>
+#endif
+
+
+inline  std::ostream &operator << (std::ostream &os, const std::vector<bool> &list)
 {
-    for (auto const &i: list) {
-        os <<  i;
-    }
+    for (auto const &i: list)
+        os << i;
+
     os << '\n';
     return os;
 }
 
-std::ostream &operator<<(std::ostream &os, const std::vector<int> &list)
+inline std::ostream &operator << (std::ostream &os, const std::vector<int> &list)
 {
-    for (auto const &i: list) {
+    for (auto const &i: list)
         os << ' ' << i;
-    }
+
     return os;
 }
-
 
 class LongueurMaximal {
 private:
@@ -36,77 +45,27 @@ private:
     std::vector<bool> polynomeBool;
 public:
 
-    LongueurMaximal(const std::vector<int>& newPolynom){
-        std::vector<bool> newVecteurInitial;
-        // TODO generaer avec le temps
-        newVecteurInitial = generateVecteurInitial(newPolynom);
-        codeur = newVecteurInitial;
-        vecteurInitial = newVecteurInitial;
-        polynomeInt = newPolynom;
-        polynomeBool = generateFromPolynopm(newPolynom);
-    }
+    // Constructors
+    LongueurMaximal(const std::vector<int>& newPolynom);
 
-    LongueurMaximal(const std::vector<int>& newPolynom , bool init): LongueurMaximal(newPolynom){
+    LongueurMaximal(const std::vector<int>& newPolynom , bool init);
 
+    std::vector<bool> generateFromPolynopm(const std::vector<int> &poly);
 
-    }
+    std::vector<bool> generateVecteurInitial(const std::vector<int> &poly);
 
-    const std::vector<bool> &getVecteurInitial() const {
-        return vecteurInitial;
-    }
+    std::vector<bool> generateVecteurInitialFromTime(const std::vector<int> &poly);
+
+    // Getters
+    const std::vector<bool> &getVecteurInitial() const;
 
     const std::vector<bool> &getPolynome() const {
         return polynomeBool;
     }
 
-    std::vector<bool> generateFromPolynopm(const std::vector<int> &poly) {
-        std::vector<bool> listBool ;
-        auto max = *max_element(poly.begin(), poly.end());
-        for (int i = 0; i < max; ++i) {
-            listBool.push_back(0);
-        }
-        for (auto &item: poly){
-            listBool[item-1] = true;
-        }
-        return listBool ;
-    }
+    // Utilities
 
-    std::vector<bool> generateVecteurInitial(const std::vector<int> &poly) {
-        auto max = *max_element(poly.begin(), poly.end());
-        std::vector<bool> newVecteurInitial;
-        for (int i = 0; i < max; ++i) {
-            newVecteurInitial.push_back(true);
-        }
-
-        return newVecteurInitial ;
-    }
-
-    std::vector<bool> generateVecteurInitialFromTime(const std::vector<int> &poly) {
-        time_t seconds = time(NULL)%codeur.size();
-
-        auto max = *max_element(poly.begin(), poly.end());
-        std::vector<bool> newVecteurInitial;
-        for (int i = 0; i < max; ++i) {
-            newVecteurInitial.push_back(true);
-        }
-
-        return newVecteurInitial ;
-    }
-
-    //time_t seconds;
-    //seconds = time(NULL);
-    //std::cout << seconds;
-
-    bool generate(){
-        bool result = codeur.back();
-        bool newbite = 0;
-        for (int i = polynomeBool.size(); i >= 0; i--)
-            if (polynomeBool[i] == 1)
-                newbite = newbite xor codeur[i];
-        codeur.pop_back();
-        codeur.insert(codeur.begin(),newbite);
-        return result;
-    }
+    bool generate();
 
     std::vector<bool> generate(int n){
         std::vector<bool> result;
@@ -115,18 +74,18 @@ public:
         return result;
     }
 
+    double millisecond();
 
     friend std::ostream &operator<<(std::ostream &os, const LongueurMaximal &maximal) {
         os << "LongueurMaximal:"
-        << "\n\tcodeur: " << maximal.codeur
-        << "\tvecteurInitial: " << maximal.vecteurInitial
-        << "\tpolynome:" << maximal.polynomeInt
-        << "\n\t\t" << maximal.polynomeBool
-        << "\n";
+           << "\n\tcodeur: " << maximal.codeur
+           << "\tvecteurInitial: " << maximal.vecteurInitial
+           << "\tpolynome:" << maximal.polynomeInt
+           << "\n\t\t" << maximal.polynomeBool
+           << "\n";
         return os;
     }
+
 };
-
-
 
 #endif //CODAGETP_LONGUEURMAXIMAL_H

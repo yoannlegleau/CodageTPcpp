@@ -13,12 +13,12 @@ int main() {
     //auto *jpl = new JPL({{1,3},{1,5},{3,7}},true);
     //std::cout << *jpl;
     //std::cout << jpl->generate(20);
-/*
+
     auto *jpl = new JPL({{1,2},{1,3}},true);
     std::cout << *jpl;
     std::cout << jpl->generate(21);
     std::cout << jpl->generate(21);
-*/
+
 
 
     return 0;

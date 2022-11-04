@@ -3,4 +3,4 @@ project(CodageTP)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(CodageTP main.cpp)
+add_executable(CodageTP main.cpp LongueurMaximal/LongueurMaximal.cpp LongueurMaximal/JPL.cpp)
